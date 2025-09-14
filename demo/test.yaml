@@ -1,0 +1,30 @@
+workflow:
+  name: (TEST) Check GitHub Repository Commits
+  description: TEST
+  disabled: false
+  triggers:
+    - type: interval
+      value: 300000000
+  inputs: []
+  consts: {}
+  owners: []
+  services: []
+  steps:
+    - name: fetch-github-commits
+      provider:
+        type: http
+        config: "{{ providers.default-http }}"
+        with:
+          url: https://api.github.com/repos/evitell/Keep-Demo/commits
+          method: GET
+          headers:
+            Accept: application/vnd.github.v3+json
+            User-Agent: Keep-Workflow-Agent
+          timeout: 30
+  actions:
+    - name: notify-discord-new-commits
+      provider:
+        type: discord
+        config: "{{ providers.keep_demo_discord }}"
+        with:
+          content: (TEST) commit for 'evitell/Keep-Demo'. Check your repository for details.
