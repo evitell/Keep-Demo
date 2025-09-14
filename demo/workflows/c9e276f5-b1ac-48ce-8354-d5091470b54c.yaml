@@ -1,0 +1,30 @@
+id: c9e276f5-b1ac-48ce-8354-d5091470b54c
+description: This workflow periodically checks for new commits in the 'evitell/Keep-Demo' GitHub repository and sends a notification to Discord when new commits are detected.
+disabled: false
+triggers:
+- type: interval
+  value: 300000000
+name: Check GitHub Repository Commits
+inputs: []
+consts: {}
+owners: []
+services: []
+steps:
+- name: fetch-github-commits
+  provider:
+    type: http
+    config: "{{ providers.default-http }}"
+    with:
+      url: https://api.github.com/repos/evitell/Keep-Demo/commits
+      method: GET
+      headers:
+        Accept: application/vnd.github.v3+json
+        User-Agent: Keep-Workflow-Agent
+      timeout: 30
+actions:
+- name: notify-discord-new-commits
+  provider:
+    type: discord
+    config: "{{ providers.keep_demo_discord }}"
+    with:
+      content: New commits have been detected in the GitHub repository 'evitell/Keep-Demo'. Check your repository for details.

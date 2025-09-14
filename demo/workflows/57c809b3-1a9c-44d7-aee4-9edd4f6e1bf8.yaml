@@ -1,0 +1,18 @@
+id: 57c809b3-1a9c-44d7-aee4-9edd4f6e1bf8
+description: "This workflow sends an alert notification whenever a new message is posted in the #notify channel on Discord."
+disabled: false
+triggers:
+- type: alert
+name: Discord Notify Alert Workflow
+inputs: []
+owners: []
+services: []
+consts: {}
+steps: []
+actions:
+- name: send-alert-notification
+  provider:
+    type: console
+    config: "{{ providers.default-console }}"
+    with:
+      message: "New message in #notify from Discord: {{ alert.message }}"

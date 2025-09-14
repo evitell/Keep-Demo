@@ -1,0 +1,34 @@
+id: github-star-tracker
+description: Monitors new GitHub stars for the Keep repository and sends Slack notifications with stargazer details and timestamps.
+disabled: false
+triggers:
+- type: manual
+- type: interval
+  value: 30000
+name: GitHub Star Tracker
+inputs: []
+consts: {}
+owners: []
+services: []
+steps:
+- name: get-github-stars
+  provider:
+    type: github.stars
+    config: "{{ providers.Github }}"
+    with:
+      previous_stars_count:
+        default: 0
+        key: "{{ last_workflow_results.get-github-stars.0.stars }}"
+      last_stargazer:
+        default: ""
+        key: "{{ last_workflow_results.get-github-stars.0.last_stargazer }}"
+      repository: evitell/Keep-Demo
+actions:
+- name: "alert-start"
+  provider:
+    type: keep
+    with:
+      alert:
+        name: "Current star count"
+        description: "Stars: {{ last_workflow_results.get-github-stars.0.stars }}"
+        severity: "info"
