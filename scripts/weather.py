@@ -54,7 +54,7 @@ def main():
                 name=s,
                 message=f"{s_desc} update in {loc_name}",
                 description=s_desc,
-                source=["weather gods"],
+                source=["weather_gods"],
                 labels={
                     "weather": "true",
                     "weather_type": s_desc.lower().replace(" ", "_"),
