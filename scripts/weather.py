@@ -38,8 +38,7 @@ def main():
         except:
             print(f"Skipping {loc_name} due to timeout reached")
             continue
-        print(w.keys())
-        print(w)
+
         current = w["current"]
         t = current["time"]
         temperature = current["temperature_2m"]
