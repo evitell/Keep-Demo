@@ -53,7 +53,7 @@ def main():
             send.send(
                 name=s,
                 message=f"{s_desc} update in {loc_name}",
-                description="",
+                description=s_desc,
                 source=["weather gods"],
                 labels={
                     "weather": "true",
