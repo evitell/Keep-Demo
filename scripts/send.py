@@ -63,9 +63,15 @@ def send(
     print(response.json())
 
 
+def int_fmt(i):
+    s = str(i)
+    s = "0"*(2-len(s))+s
+    return s
+
+
 if __name__ == "__main__":
-    t = f"{str(datetime.datetime.now())}Z"
-    # d = datetime.datetime.now()
-    # t = f"{d.year}-{09}-14T15:57:26.353Z"
+    # t = f"{str(datetime.datetime.now())}Z"
+    d = datetime.datetime.now()
+    t = f"{int_fmt(d.year)}-{int_fmt(d.month)}-{int_fmt(d.day)}T{int_fmt(d.hour)}:{int_fmt(d.minute)}:{int_fmt(d.second)}Z"
     send(name=f"TEST send:{t}", message="test",
          description="test", last_received=t)
