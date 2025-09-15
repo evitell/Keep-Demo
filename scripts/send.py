@@ -11,7 +11,7 @@ def send(
         message,
         description,
         service="backend",
-        source="prometheus",
+        source=None,
         severity="critical",
         alert_url="https://www.keephq.dev?alertId=1235",
         status="firing",
@@ -38,6 +38,11 @@ def send(
             "memory": "100Mi"
         }
 
+    if source is None:
+        source = [
+            "backend"
+        ]
+
     headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -51,9 +56,7 @@ def send(
         "environment": "production",
         "duplicateReason": None,
         "service": service,
-        "source": [
-            source
-        ],
+        "source": source,
 
         "message": message,
         "description": description,

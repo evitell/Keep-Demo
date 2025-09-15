@@ -10,11 +10,11 @@ def main():
             name=c["title"],
             message="a CVE",
             description=c["description"],
-            source="CVE:s",
+            source=["General security", "Vulnerabilities"],
             labels={
                 "label": "security"
             },
-            alert_url=c["link"]
+            alert_url=c["link"],
         )
         time.sleep(1)
 
