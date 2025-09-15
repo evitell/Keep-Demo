@@ -1,0 +1,76 @@
+workflow:
+  id: deepseek-enrich-alert
+  name: Demo alert enrichment with DeepSeek
+  description: Demonstrates alert enrichment of CI/CD alerts using LLM
+  disabled: false
+  triggers:
+    - type: alert
+  steps:
+    - name: deepseek-step
+      provider:
+        type: deepseek
+        config: "{{ providers.DeepSeek }}"
+        with:
+          prompt: |
+            You received this alert: {{ alert }}
+
+            Generate a structured JSON response with two fields:
+
+            1. summary: a concise summary of the alert
+
+            2. next_steps: a single Markdown-formatted bullet list of suggested steps for the engineer (use "- " for each item)
+
+            Respond only in JSON format.
+          structured_output_format:
+            type: json_object
+            schema:
+              type: object
+              properties:
+                summary:
+                  type: string
+                  description: Short summary of the alert
+                next_steps:
+                  type: string
+                  description: Recommended next steps for DevOps engineer
+              required:
+                - "summary"
+                - "next_steps"
+            strict: true
+  actions:
+    - name: console-output
+      provider:
+        type: console
+        config: "{{ providers.default-console }}"
+        with:
+          message: |
+            === Enriched Alert ===
+            Alert name: {{ alert.name }}
+            Original message: {{ alert.message }}
+            Summary: {{ steps.deepseek-step.results.response.summary }}
+            Next steps: {{ steps.deepseek-step.results.response.next_steps }}
+    - name: notify-discord-new-commits
+      provider:
+        type: discord
+        config: "{{ providers.keep_demo_discord }}"
+        with:
+          content: "=== Enriched Alert ===
+
+
+            Alert name:\ 
+
+            {{ alert.name }}
+
+
+            Original message:\ 
+
+            {{ alert.message }}
+
+
+            Summary:\ 
+
+            {{ steps.deepseek-step.results.response.summary }}
+
+
+            Next steps:\ 
+
+            {{ steps.deepseek-step.results.response.next_steps }}\n"
