@@ -54,13 +54,13 @@ def main():
                 name=s,
                 message=f"{s_desc} update in {loc_name}",
                 description="",
-                source="weather_data",
+                source=["weather gods"],
                 labels={
                     "weather": "true",
                     "weather_type": s_desc.lower().replace(" ", "_"),
                     "location": loc_name
                 },
-                alert_url=f"https://en.wikipedia.org/{loc_name}"
+                alert_url=f"https://en.wikipedia.org/{loc_name}",
             )
             time.sleep(1)
 
