@@ -20,7 +20,9 @@ def fetch_cves():
             for key in KEYS:
                 if y.tag == key:
                     cve[key] = y.text
-
+            for key in KEYS:
+                if not key in cve.keys():
+                    cve[key] = ""
         cves.append(cve)
     return cves
 
