@@ -65,7 +65,7 @@ def send(
 
 if __name__ == "__main__":
     t = f"{str(datetime.datetime.now())}Z"
-    d = datetime.datetime.now()
-    t = f"{d.year}-{09}-14T15:57:26.353Z"
+    # d = datetime.datetime.now()
+    # t = f"{d.year}-{09}-14T15:57:26.353Z"
     send(name=f"TEST send:{t}", message="test",
          description="test", last_received=t)
