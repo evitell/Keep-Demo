@@ -19,7 +19,7 @@ steps:
         type: json_object
 actions:
 - name: send
-  if: "{{ steps.ask-deepseek-if-this-workflow-is-applicable.results.response.should_run }}"
+  if: "{{ steps.ask-deepseek-if-this-workflow-is-applicable.results.response.should_bring_clothes_for_cold_or_rainy_weather }}"
   provider:
     type: console
     config: "{{ providers.default-console }}"
