@@ -1,27 +1,48 @@
-id: ai-guided-wardrobe-guide
-description: Uses deepseek to intelligently determine clothing
-disabled: false
-triggers:
-- type: alert
-name: Deepseek-clothes-based-on-alert
-inputs: []
-consts: {}
-owners: []
-services: []
-steps:
-- name: ask-deepseek-if-this-workflow-is-applicable
-  provider:
-    type: deepseek
-    config: "{{ providers.my_deepseek }}"
-    with:
-      prompt: "You received the flollowing weather information: {{alert}}. Based on this, tell me if I need to bring clothes for rainy and/or cold weather when going to Stockholm. If the information does not say anything about the weather in stockholm, say no.\n\n\nEXAMPLE JSON OUTPUT:\n    {\n        \\\"should_bring_clothes_for_cold_or_rainy_weather\\\": true\n    }\n"
-      structured_output_format:
-        type: json_object
-actions:
-- name: send
-  if: "{{ steps.ask-deepseek-if-this-workflow-is-applicable.results.response.should_bring_clothes_for_cold_or_rainy_weather }}"
-  provider:
-    type: console
-    config: "{{ providers.default-console }}"
-    with:
-      message: You should wear clothes {{ alert.message }}
+workflow:
+  id: ai-guided-wardrobe-guide
+  name: Deepseek-clothes-based-on-alert
+  description: Uses deepseek to intelligently determine clothing
+  disabled: false
+  triggers:
+    - type: alert
+      filters:
+        - key: provider
+          value: weather_gods
+  inputs: []
+  consts: {}
+  owners: []
+  services: []
+  steps:
+    - name: ask-deepseek-if-this-workflow-is-applicable
+      provider:
+        type: deepseek
+        config: "{{ providers.my_deepseek }}"
+        with:
+          prompt: "You received the flollowing weather information: {{alert}}. Based on this, tell me if I need to bring clothes for rainy and/or cold weather when going to Stockholm. If the information does not say anything about the weather in stockholm, say no.
+
+
+
+            EXAMPLE JSON OUTPUT:
+
+            \    {
+
+            \        \\\"should_bring_clothes_for_cold_or_rainy_weather\\\": true
+
+            \    }\n"
+          structured_output_format:
+            type: json_object
+  actions:
+    - name: send
+      if: "{{ steps.ask-deepseek-if-this-workflow-is-applicable.results.response.should_bring_clothes_for_cold_or_rainy_weather }}"
+      provider:
+        type: console
+        config: "{{ providers.default-console }}"
+        with:
+          message: You should wear clothes {{ alert.message }}
+    - name: notify-clothes
+      if: "{{ steps.ask-deepseek-if-this-workflow-is-applicable.results.response.should_bring_clothes_for_cold_or_rainy_weather }}"
+      provider:
+        type: discord
+        config: "{{ providers.keep_demo_discord }}"
+        with:
+          content: You need to bring your rain jacket to Stockholm.
