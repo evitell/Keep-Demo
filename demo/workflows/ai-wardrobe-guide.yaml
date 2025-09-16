@@ -7,7 +7,7 @@ workflow:
     - type: alert
       filters:
         - key: provider
-          value: weather_gods
+          value: "weather_gods"
   inputs: []
   consts: {}
   owners: []
@@ -36,14 +36,17 @@ workflow:
       if: "{{ steps.ask-deepseek-if-this-workflow-is-applicable.results.response.should_bring_clothes_for_cold_or_rainy_weather }}"
       provider:
         type: keep
+        config: "{{ providers.default-keep }}"
         with:
           alert:
-            name: "Jacket notification"
+            severity: "warn"
+            source: "wardrobe_guide"
+            name: Jacket notification
             description: "You should bring your jacket to Stockholm. Reason: {{ alert.message }}"
     - name: notify-clothes
       if: "{{ steps.ask-deepseek-if-this-workflow-is-applicable.results.response.should_bring_clothes_for_cold_or_rainy_weather }}"
       provider:
         type: discord
-        config: "{{ providers.keep_demo_discord }}"
+        config: "{{ providers.discord_weather }}"
         with:
           content: You need to bring your rain jacket to Stockholm.
