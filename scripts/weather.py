@@ -15,7 +15,7 @@ def get_weather(lat_long):
     params = (
         ('latitude', lat_long[0]),
         ('longitude', lat_long[1]),
-        ('current', 'temperature_2m,relative_humidity_2m,wind_speed_10m,rain,precipitation_probability,precipitation'),
+        ('current', 'temperature_2m,relative_humidity_2m,wind_speed_10m,rain,precipitation'),
         # ('hourly', 'temperature_2m,relative_humidity_2m,wind_speed_10m'),
         ('hourly', ''),
     )

@@ -22,8 +22,9 @@ def send_incomplete(loc_name, lat_long):
         "time": t,
         "location": loc_name,
     }
-    for k in ["temperature_2m", "relative_humidity_2m", "wind_speed_10m", "precipitation_probability", "precipitation"]:
+    for k in ["temperature_2m", "relative_humidity_2m", "wind_speed_10m", "precipitation"]:
         if random.choice([True, False]):
+            print(f"({loc_name}): adding data {k} = {current[k]}")
             data[k] = current[k]
 
     send.send(
