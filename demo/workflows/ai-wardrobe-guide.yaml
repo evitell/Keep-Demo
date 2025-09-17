@@ -13,7 +13,7 @@ workflow:
   steps:
     - name: ask-deepseek-if-this-workflow-is-applicable
       provider:
-        type: openai
+        type: deepseek
         config: "{{ providers.my_deepseek }}"
         with:
           prompt: "You received the flollowing weather information: {{alert.name}}. Based on this, tell me if I need to bring clothes for rainy and/or cold weather when going to Stockholm. If the information does not say anything about the weather in stockholm, say no.
