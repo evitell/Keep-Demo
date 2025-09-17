@@ -5,9 +5,7 @@ workflow:
   disabled: false
   triggers:
     - type: alert
-      filters:
-        - key: provider
-          value: "weather_gods"
+      cel: source == "weather_gods"
   inputs: []
   consts: {}
   owners: []
@@ -15,10 +13,10 @@ workflow:
   steps:
     - name: ask-deepseek-if-this-workflow-is-applicable
       provider:
-        type: deepseek
+        type: openai
         config: "{{ providers.my_deepseek }}"
         with:
-          prompt: "You received the flollowing weather information: {{alert}}. Based on this, tell me if I need to bring clothes for rainy and/or cold weather when going to Stockholm. If the information does not say anything about the weather in stockholm, say no.
+          prompt: "You received the flollowing weather information: {{alert.name}}. Based on this, tell me if I need to bring clothes for rainy and/or cold weather when going to Stockholm. If the information does not say anything about the weather in stockholm, say no.
 
 
 
@@ -42,11 +40,11 @@ workflow:
             severity: "warn"
             source: "wardrobe_guide"
             name: Jacket notification
-            description: "You should bring your jacket to Stockholm. Reason: {{ alert.message }}"
+            description: "You should bring your jacket to Stockholm. Reason: {{ alert.name }}"
     - name: notify-clothes
       if: "{{ steps.ask-deepseek-if-this-workflow-is-applicable.results.response.should_bring_clothes_for_cold_or_rainy_weather }}"
       provider:
         type: discord
         config: "{{ providers.discord_weather }}"
         with:
-          content: You need to bring your rain jacket to Stockholm.
+          content: You need to bring your jacket to Stockholm.
